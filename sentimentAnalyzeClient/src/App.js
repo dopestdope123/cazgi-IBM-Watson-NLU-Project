@@ -10,7 +10,7 @@ class App extends React.Component {
   value of the state, will be returned. The initial input mode
   is set to text
   */
-  state = {innercomp:<textarea rows="4" cols="50" id="textinput"/>,
+  state = {innercomp:<textarea rows="4" cols="50" id="textinput" />,
             mode: "text",
           sentimentOutput:[],
           sentiment:true
@@ -30,7 +30,7 @@ class App extends React.Component {
       mode = "text"
       rows = 4
     }
-      this.setState({innercomp:<textarea rows={rows} cols="50" id="textinput"/>,
+      this.setState({innercomp:<textarea rows={rows} cols="50" id="textinput" />,
       mode: mode,
       sentimentOutput:[],
       sentiment:true
@@ -38,25 +38,26 @@ class App extends React.Component {
   } 
   
   sendForSentimentAnalysis = () => {
+   
     this.setState({sentiment:true});
     let url = ".";
     let mode = this.state.mode
     url = url+"/" + mode + "/sentiment?"+ mode + "="+document.getElementById("textinput").value;
-
     fetch(url).then((response)=>{
-        response.json().then((data)=>{
-        this.setState({sentimentOutput:data.label});
-        let output = data.label;
-        let color = "white"
-        switch(output) {
-          case "positive": color = "black";break;
-          case "negative": color = "black";break;
-          default: color = "black";
-        }
-        output = <div style={{color:color,fontSize:20}}>{output}</div>
-        this.setState({sentimentOutput:output});
-      })});
-  }
+      response.json().then((data)=>{
+      this.setState({sentimentOutput:data.label});
+      let output = data.label;
+      let color = "white"
+      switch(output) {
+        case "positive": color = "green";break;
+        case "neutral": color = "yellow";break;
+        case "negative": color = "red";break;
+        default: color = "black";
+      }
+      output = <div style={{color:color,fontSize:20}}>{output}</div>
+      this.setState({sentimentOutput:output});
+    })});
+}
 
   sendForEmotionAnalysis = () => {
 
@@ -70,11 +71,12 @@ class App extends React.Component {
       this.setState({sentimentOutput:<EmotionTable emotions={data}/>});
   })})  ;
   }
-  
+
 
   render() {
     return (  
       <div className="App">
+        {document.title = "Sentiment Analyzer"} <br></br>
       <button className="btn btn-info" onClick={()=>{this.renderOutput('text')}}>Text</button>
         <button className="btn btn-dark"  onClick={()=>{this.renderOutput('url')}}>URL</button>
         <br/><br/>
